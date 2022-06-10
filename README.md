@@ -1,13 +1,13 @@
 # PagerDuty Incidents to Smartsheet
-This is a Python script that sends PagerDuty incidents to a sheet in Smartsheet. The script adds new incidents to the bottom of the sheet, and updates any existing incident already in the sheet. 
+This is a Python script that sends [PagerDuty](https://www.pagerduty.com) incidents to a sheet in [Smartsheet](https://www.smartsheet.com/). The script adds new incidents to the bottom of the sheet, and updates any existing incident already in the sheet. 
 
 This is very basic. The update only checks if the incident id is already in the sheet, and then updates the entire row no matter if there are any changes in the incident.
 
 ## Dependencies
-This script relies on the [PagerDuty API Python](https://github.com/PagerDuty/pagerduty-api-python-client) as well as the [Smartsheet Python SDK](https://github.com/smartsheet-platform/smartsheet-python-sdk). Before using the script please install both of those libraries using [PIP](https://pip.pypa.io/en/stable/installing/).
+This script relies on the [PDPYRAS: PagerDuty Python REST API Sessions](https://github.com/PagerDuty/pdpyras) as well as the [Smartsheet Python SDK](https://github.com/smartsheet-platform/smartsheet-python-sdk). Before using the script please install both of those libraries using [PIP](https://pip.pypa.io/en/stable/installing/).
 
 ```
-pip install pypd
+pip install pdpyras
 pip install smartsheet-python-sdk
 ```
 

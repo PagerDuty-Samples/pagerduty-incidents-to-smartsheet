@@ -1,7 +1,7 @@
 # install smartsheet sdk with pip install smartsheet-python-sdk
 import smartsheet
-# install pagerduty-api-python-client with pip install pypd
-import pypd
+# install pdpyras with pip install pdpyras
+from pdpyras import APISession
 import os
 import logging
 from datetime import datetime, timedelta
@@ -11,7 +11,8 @@ smartsheet_token = os.environ['SMAR_API_KEY_PD_DEV']
 smart = smartsheet.Smartsheet(access_token=smartsheet_token)
 sheet_id = 3884170637272964
 
-pypd.api_key = os.environ['PD_API_KEY']
+pd_api_key = os.environ['PD_API_KEY']
+pd_session = APISession(pd_api_key)
 
 # Make sure we don't miss any error
 smart.errors_as_exceptions(True)
@@ -20,7 +21,7 @@ smart.errors_as_exceptions(True)
 logging.basicConfig(filename='pd-incidents-to-sheet.log', level=logging.INFO)
 
 # fetch all incidents from PagerDuty
-incidents = pypd.Incident.find(since=datetime.now() - timedelta(days=30))
+incidents = pd_session.list_all('incidents',params={'since':datetime.now() - timedelta(days=30) })
 
 smartsheet_column_map = {}
 
@@ -33,7 +34,7 @@ def get_cell_by_column_name(row, column_name):
 def get_existing_incidents(ids_column_id):
     sheet_incident_ids_only = smart.Sheets.get_sheet(sheet_id, column_ids=ids_column_id)
     incident_row_map = {}
-
+    
     for r in sheet_incident_ids_only.rows:
         for cell in r.cells:
             incident_row_map[cell.value] = r.id
@@ -107,8 +108,7 @@ for i in incidents:
         service_cell.value = get_assignee_names(i.get('assignments'))
         row.cells.append(service_cell)
 
-
-    if existing_incidents[i.get('id')]:
+    if i.get('id') in existing_incidents:
         row.id = existing_incidents[i.get('id')]
         update_rows.append(row)
     else:
